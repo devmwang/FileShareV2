@@ -6,7 +6,7 @@ Window {
     visible: true
     width: 1280
     height: 800
-//    flags: Qt.FramelessWindowHint | Qt.Window
+    flags: Qt.FramelessWindowHint | Qt.Window
     color: "transparent"
 
     property QtObject backend

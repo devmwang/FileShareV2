@@ -31,23 +31,24 @@ class Backend(QObject):
         self.clockThread.start()
 
     # Backend Helper Methods
-    def updateClock(self):
-        _currentDate = strftime('%A, %d', localtime()) # Verify if removing leading zero is necessary, code sample: strftime('%a, %d', localtime()).replace(' 0', ' ')
-        _currentTime = strftime('%I:%M %S %p', localtime())
-        _currentMonthYear = strftime('%B, %Y', localtime())
-
-        self.currentDate.emit(_currentDate)
-        self.currentTime.emit(_currentTime)
-        self.currentMonthYear.emit(_currentMonthYear)
+    @Slot(list)
+    def updateClock(self, msg):
+        self.currentDate.emit(msg[0])
+        self.currentTime.emit(msg[1])
+        self.currentMonthYear.emit(msg[2])
 
 
 # Application Background Worker Classes
 class ClockWorker(QThread):
-    runBackendUpdateClockMethod = Signal()
+    runBackendUpdateClockMethod = Signal(list)
 
     def long_running(self):
         while (True):
-            self.runBackendUpdateClockMethod.emit()
+            _currentDate = strftime('%A, %d', localtime()) # Verify if removing leading zero is necessary, code sample: strftime('%a, %d', localtime()).replace(' 0', ' ')
+            _currentTime = strftime('%I:%M %S %p', localtime())
+            _currentMonthYear = strftime('%B, %Y', localtime())
+
+            self.runBackendUpdateClockMethod.emit([_currentDate, _currentTime, _currentMonthYear])
             sleep(0.1) # Increase delay if resources begin to run out
 
 

@@ -11,9 +11,9 @@ Window {
 
     property QtObject backend
 
-    property string current_date: "[Date Placeholder]"
-    property string current_time: "[Time Placeholder]"
-    property string current_monthyear: "[MonthYear Placeholder]"
+    property string current_date: "[Date PH]"
+    property string current_time: "[Time PH]"
+    property string current_monthyear: "[MonthYear PH]"
 
     Connections {
         target: backend

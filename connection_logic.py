@@ -37,8 +37,8 @@ if side.lower() == 's' or side.lower() == 'send':
     # Send file
     s.send(f"{filepath}{separator}{filesize}".encode())
     progress = tqdm.tqdm(range(filesize), f"Sending {filepath}", unit="B", unit_scale=True, unit_divisor=1024)
-    with open(filepath, "rb") as f:
-        for _ in progress:
+    with open(filepath, "rb") as f: # equal to simple "range(filesize)"
+        for _ in progress: # equal to "for _ in range(filesize)"
             bytes_read = f.read(buffer_size)
             if not bytes_read:
                 break

@@ -1,3 +1,6 @@
+QML_IMPORT_NAME = "FileShareV2"
+QML_IMPORT_MAJOR_VERSION = 1
+
 import os
 import sys
 
@@ -6,7 +9,7 @@ from pathlib import Path
 
 from PySide6.QtCore import Signal, Slot, QObject, QThread
 from PySide6.QtGui import QGuiApplication, QIcon
-from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtQml import QQmlApplicationEngine, QmlElement
 
 
 ## Backend Object Class
@@ -33,6 +36,19 @@ class Backend(QObject):
 
         self.clockThread.start()
 
+        #### Move this out of init to other method, shouldn't run on start, should run when needed
+        # Initialize server worker and thread
+        # self.serverThread = QThread()
+        # self.serverWorker = ServerWorker()
+        # self.serverWorker.moveToThread(self.serverThread)
+
+        # self.serverWorker.runBackendUpdateClockMethod.connect(self.updateClock)
+
+        # self.serverWorker.finished.connect(self.serverThread.quit)
+        # self.serverThread.started.connect(self.serverWorker.long_running)
+
+        # self.serverThread.start()
+
     ## Backend Helper Methods
     # Clock Update Helper
     @Slot(list)
@@ -50,12 +66,32 @@ class ClockWorker(QThread):
 
     def long_running(self):
         while (True):
-            _currentDate = strftime('%A, %d', localtime()) # Verify if removing leading zero is necessary, code sample: strftime('%a, %d', localtime()).replace(' 0', ' ')
-            _currentTime = strftime('%I:%M %p', localtime()) # Use %S to test if updating every second
+            _currentDate = strftime('%A, %d', localtime()) # Verify if removing leading zero is necessary, sample: strftime('%a, %d', localtime()).replace(' 0', ' ')
+            _currentTime = strftime('%I:%M %S %p', localtime()) # Use %S to test if updating every second
             _currentMonthYear = strftime('%B, %Y', localtime())
 
             self.runBackendUpdateClockMethod.emit([_currentDate, _currentTime, _currentMonthYear])
             sleep(0.1) # Increase delay if resources begin to run out
+
+# Server Worker
+class ServerWorker(QThread):
+    status = Signal()
+
+    # def long_running(self):
+       # do something 
+
+
+## QML Frontend Bridge
+@QmlElement
+class Bridge(QObject):
+    # Send File
+    @Slot(list)
+    def sendFile(list):
+        return # Add send logic
+
+    # Receive File
+    def receiveFile(list):
+        return # Add receive logic
 
 
 ## Application Initialization

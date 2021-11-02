@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Window 2.3
 
+import FileShareV2 1.0
+
 Window {
     id: applicationWindow
     visible: true
@@ -27,6 +29,12 @@ Window {
         function onCurrentMonthYear(msg) {
             current_monthyear = msg;
         }
+    }
+
+    Bridge {
+        id: bridge
+
+
     }
 
     Rectangle {
